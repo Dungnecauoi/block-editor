@@ -86,11 +86,13 @@
   color: var(--be-text) !important;
 }
 
-.be-editor--dark .ce-inline-tool {
+.be-editor--dark .ce-inline-tool,
+.be-editor--dark .ce-popover-item {
   color: var(--be-text-secondary) !important;
 }
 
-.be-editor--dark .ce-inline-tool:hover {
+.be-editor--dark .ce-inline-tool:hover,
+.be-editor--dark .ce-popover-item:hover {
   background: var(--be-bg-hover) !important;
   color: var(--be-text) !important;
 }

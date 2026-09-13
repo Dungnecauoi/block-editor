@@ -131,66 +131,70 @@
 
 /* ============================================
    ENLARGED INLINE TOOLBAR (Text Selection)
+
+   Editor.js 2.x renders inline tools inside a Popover component:
+     .ce-inline-toolbar (bare positioning wrapper — no width/visual style)
+       > .ce-popover.ce-popover--inline
+           > .ce-popover__container   <- the actual visible card
+               > .ce-popover__items   <- row of buttons
+                   > .ce-popover-item        (native tools: bold, convert-to)
+                   > .ce-popover-item-html   (custom tools: wraps a .ce-inline-tool button)
+
+   Styling `.ce-inline-toolbar` itself (as older Editor.js versions required)
+   creates a second, independently-sized box around the real card, which is
+   sized to `max-content` by Editor.js — the two disagree and the real card
+   spills out of / gets clipped by the fake one. Style the real card instead.
    ============================================ */
 
-.be-editor .ce-inline-toolbar {
-  height: 46px !important;
+.be-editor .ce-inline-toolbar .ce-popover__container {
   background: var(--be-bg) !important;
   border: 1px solid var(--be-border) !important;
   border-radius: 12px !important;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12), 0 2px 6px rgba(0, 0, 0, 0.04) !important;
   padding: 4px 6px !important;
+  width: max-content !important;
+  max-width: min(92vw, 640px) !important;
+}
+
+.be-editor .ce-inline-toolbar .ce-popover__items {
   display: flex !important;
   align-items: center !important;
   gap: 3px !important;
+  flex-wrap: nowrap !important;
+  overflow-x: auto !important;
 }
 
-.be-editor .ce-inline-toolbar__buttons {
-  display: flex !important;
-  align-items: center !important;
-  gap: 3px !important;
-}
-
-.be-editor .ce-inline-tool {
-  width: 36px !important;
+.be-editor .ce-inline-toolbar .ce-popover-item,
+.be-editor .ce-inline-toolbar .ce-inline-tool {
+  min-width: 36px !important;
   height: 36px !important;
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
   border-radius: 8px !important;
   color: #475569 !important;
-  transition: all 0.15s ease !important;
-  padding: 0 !important;
+  transition: background 0.15s ease, color 0.15s ease !important;
+  padding: 0 6px !important;
+  flex-shrink: 0 !important;
 }
 
-.be-editor .ce-inline-tool svg {
+.be-editor .ce-inline-toolbar .ce-popover-item svg,
+.be-editor .ce-inline-toolbar .ce-inline-tool svg {
   width: 18px !important;
   height: 18px !important;
 }
 
-.be-editor .ce-inline-tool:hover {
+.be-editor .ce-inline-toolbar .ce-popover-item:hover,
+.be-editor .ce-inline-toolbar .ce-inline-tool:hover {
   background: var(--be-bg-hover) !important;
   color: var(--be-primary) !important;
-  transform: scale(1.05) !important;
 }
 
-.be-editor .ce-inline-tool--active {
+.be-editor .ce-inline-toolbar .ce-inline-tool--active,
+.be-editor .ce-inline-toolbar .ce-popover-item--active {
   background: var(--be-primary-alpha) !important;
   color: var(--be-primary) !important;
   font-weight: 600 !important;
-}
-
-.be-editor .ce-inline-toolbar__dropdown {
-  height: 36px !important;
-  padding: 0 10px !important;
-  border-radius: 8px !important;
-  font-size: 13px !important;
-  font-weight: 500 !important;
-  display: flex !important;
-  align-items: center !important;
-  gap: 6px !important;
-  border-right: 1px solid var(--be-border) !important;
-  margin-right: 4px !important;
 }
 
 /* ============================================
