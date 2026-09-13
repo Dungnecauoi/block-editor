@@ -30,3 +30,13 @@
   color: var(--be-text-secondary, #6b7280);
   background: var(--be-bg-secondary, #f3f4f6);
 }
+
+/* Highlighted (background-color) text — soft rounded padding instead of a
+   flat, edge-to-edge rectangle sitting flush against the surrounding text. */
+.be-text-color--background {
+  padding: 0.05em 0.2em;
+  margin: 0 -0.1em;
+  border-radius: 4px;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}

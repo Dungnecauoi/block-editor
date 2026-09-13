@@ -32,8 +32,11 @@ export class TopToolbar {
   private callbacks: TopToolbarCallbacks;
   private wordsCountEl: HTMLElement | null = null;
   private charsCountEl: HTMLElement | null = null;
+  private blockTypeSelect: HTMLSelectElement | null = null;
   private isFullscreen = false;
   private isPreview = false;
+  private statsInterval: ReturnType<typeof setInterval> | null = null;
+  private selectionChangeHandler = () => this._syncBlockTypeDropdown();
 
   constructor(editor: EditorJS, container: HTMLElement, config?: TopToolbarConfig, callbacks?: TopToolbarCallbacks) {
     this.editor = editor;
@@ -248,6 +251,18 @@ export class TopToolbar {
   }
 
   private attachListeners(): void {
+    // Clicking a plain <button> shifts focus away from the contenteditable
+    // on mousedown, which collapses/clears the current text selection
+    // before the subsequent 'click' handler ever runs — so
+    // document.execCommand('bold') etc. would apply to nothing. Preventing
+    // the default mousedown behavior keeps the selection intact.
+    this.container.addEventListener('mousedown', (e) => {
+      const target = e.target as HTMLElement;
+      if (target.closest('.be-tbar-btn')) {
+        e.preventDefault();
+      }
+    });
+
     this.container.addEventListener('click', (e) => {
       const target = e.target as HTMLElement;
       const btn = target.closest('.be-tbar-btn') as HTMLElement;
@@ -259,17 +274,71 @@ export class TopToolbar {
       this.executeAction(action);
     });
 
-    const blockTypeSelect = this.container.querySelector('.be-tbar-select[data-action="block-type"]') as HTMLSelectElement;
-    if (blockTypeSelect) {
-      blockTypeSelect.addEventListener('change', () => {
-        this.convertCurrentBlock(blockTypeSelect.value);
+    this.blockTypeSelect = this.container.querySelector('.be-tbar-select[data-action="block-type"]');
+    if (this.blockTypeSelect) {
+      this.blockTypeSelect.addEventListener('change', () => {
+        this.convertCurrentBlock(this.blockTypeSelect!.value);
       });
     }
 
+    // Keep the block-type dropdown in sync with wherever the caret actually is
+    document.addEventListener('selectionchange', this.selectionChangeHandler);
+
     // Update stats on change
-    setInterval(() => {
+    this.statsInterval = setInterval(() => {
       this.updateStats();
     }, 1200);
+  }
+
+  /**
+   * Reflect the currently focused block's type in the dropdown. Only
+   * updates it for block types the dropdown actually has an option for
+   * (paragraph/h1-h3/quote/alert/code) — for anything else (list, image,
+   * table, ...) the dropdown is left as-is rather than falsely showing
+   * "Paragraph".
+   */
+  private _syncBlockTypeDropdown(): void {
+    if (!this.blockTypeSelect) return;
+    const selection = window.getSelection();
+    const anchorNode = selection?.anchorNode;
+    if (!anchorNode || !this.container.contains(anchorNode)) return;
+
+    try {
+      const index = this.editor.blocks.getCurrentBlockIndex();
+      if (index < 0) return;
+      const block = (this.editor.blocks as any).getBlockByIndex(index);
+      if (!block?.name) return;
+
+      let value: string | null = null;
+      if (block.name === 'paragraph') {
+        value = 'paragraph';
+      } else if (block.name === 'header') {
+        const headerEl = block.holder?.querySelector('h1, h2, h3, h4, h5, h6');
+        const level = headerEl ? parseInt(headerEl.tagName.substring(1), 10) : null;
+        value = level && level <= 3 ? `h${level}` : null;
+      } else if (block.name === 'quote' || block.name === 'alert' || block.name === 'code') {
+        value = block.name;
+      }
+
+      if (value && this.blockTypeSelect.value !== value) {
+        this.blockTypeSelect.value = value;
+      }
+    } catch {
+      // Selection/block lookup can transiently fail mid-edit (e.g. block
+      // being removed) — safe to just skip this sync tick.
+    }
+  }
+
+  /**
+   * Release the document-level listener and interval timer this toolbar
+   * registered, so destroying the editor doesn't leak them.
+   */
+  destroy(): void {
+    document.removeEventListener('selectionchange', this.selectionChangeHandler);
+    if (this.statsInterval) {
+      clearInterval(this.statsInterval);
+      this.statsInterval = null;
+    }
   }
 
   private executeAction(action: string): void {

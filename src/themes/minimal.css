@@ -13,7 +13,11 @@
   --be-primary-alpha: rgba(23, 23, 23, 0.05);
   --be-border: #f0f0f0;
   --be-radius: 4px;
-  --be-font-family: 'Georgia', 'Times New Roman', serif;
+  /* Georgia/Times New Roman render Vietnamese combining diacritics poorly on
+     Windows (tone marks visibly detach from the base letter, e.g. "đã" →
+     "đa`"). Cambria is a Windows-bundled serif with solid Vietnamese glyph
+     support and a similar look; Georgia stays for platforms where it's fine. */
+  --be-font-family: 'Cambria', Georgia, 'Times New Roman', serif;
 }
 
 .be-editor--minimal .ce-toolbar__plus,

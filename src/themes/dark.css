@@ -28,17 +28,11 @@
   color: var(--be-text);
 }
 
-/* Toolbar actions container (+ and 6-dots button) */
-.be-editor--dark .ce-toolbar__actions {
-  display: flex !important;
-  align-items: center !important;
-  gap: 8px !important;
-}
-
+/* Toolbar actions container (+ and 6-dots button) — sizing/positioning is
+   shared with default.css's fix for the left-gutter overflow; only theme
+   the colors here. */
 .be-editor--dark .ce-toolbar__plus,
 .be-editor--dark .ce-toolbar__settings-btn {
-  width: 38px !important;
-  height: 38px !important;
   color: var(--be-text-secondary) !important;
   background: var(--be-bg-secondary) !important;
   border: 1px solid var(--be-border) !important;
@@ -117,4 +111,83 @@
 
 .be-editor--dark a {
   color: var(--be-primary) !important;
+}
+
+/* ============================================
+   Top Quick Action Bar — was unstyled in dark mode, showing as a bright
+   white bar pasted on top of the dark editor.
+   ============================================ */
+
+.be-editor--dark .be-top-toolbar {
+  background: var(--be-bg-secondary) !important;
+  border-color: var(--be-border) !important;
+}
+
+.be-editor--dark .be-tbar-btn {
+  color: var(--be-text-secondary) !important;
+}
+
+.be-editor--dark .be-tbar-btn:hover {
+  background: var(--be-bg-hover) !important;
+  color: var(--be-text) !important;
+}
+
+.be-editor--dark .be-tbar-btn--active {
+  background: var(--be-bg-hover) !important;
+  color: var(--be-primary) !important;
+}
+
+.be-editor--dark .be-tbar-select,
+.be-editor--dark .be-tbar-stats {
+  background: var(--be-bg) !important;
+  border-color: var(--be-border) !important;
+  color: var(--be-text-secondary) !important;
+}
+
+.be-editor--dark .be-toolbar-divider {
+  background: var(--be-border) !important;
+}
+
+/* ============================================
+   Alert block — editorjs-alert hardcodes light pastel colors per variant
+   with no theme hook, so they stayed jarring pastel-on-dark. Re-tint each
+   variant to a dark-appropriate background while keeping its accent hue.
+   ============================================ */
+
+.be-editor--dark .cdx-alert-primary {
+  background-color: #1e3a5f !important;
+  border-color: #4299e1 !important;
+  color: #93c5fd !important;
+}
+
+.be-editor--dark .cdx-alert-info {
+  background-color: #0e3a3d !important;
+  border-color: #4cd4ce !important;
+  color: #5eead4 !important;
+}
+
+.be-editor--dark .cdx-alert-success {
+  background-color: #14321f !important;
+  border-color: #68d391 !important;
+  color: #86efac !important;
+}
+
+.be-editor--dark .cdx-alert-warning {
+  background-color: #3d2a0f !important;
+  border-color: #ed8936 !important;
+  color: #fbbf24 !important;
+}
+
+.be-editor--dark .cdx-alert-danger {
+  background-color: #3d1414 !important;
+  border-color: #fc8181 !important;
+  color: #fca5a5 !important;
+}
+
+.be-editor--dark .cdx-alert-light,
+.be-editor--dark .cdx-alert-dark,
+.be-editor--dark .cdx-alert-secondary {
+  background-color: var(--be-bg-secondary) !important;
+  border-color: var(--be-border) !important;
+  color: var(--be-text) !important;
 }

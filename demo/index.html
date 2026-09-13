@@ -216,36 +216,42 @@
     let currentTheme = 'default';
     let lastOutputType = 'json';
 
-    const editor = new BlockEditor({
-      holder: 'editor-container',
-      theme: 'default',
-      locale: 'en',
-      placeholder: 'Type "/" for commands, or start writing...',
-      data: {
-        blocks: [
-          { type: 'header', data: { text: 'Welcome to @duxbo/block-editor 🎉', level: 1 } },
-          { type: 'paragraph', data: { text: '🚀 <b>Trải nghiệm chỉnh sửa chuẩn doanh nghiệp</b> với hệ thống Action đa tầng, kích thước to rõ, dễ bấm và đầy đủ tiện ích.' } },
-          { type: 'alert', data: { message: '💡 <b>Các tính năng Action mới:</b><br/>• <b>Top Quick Action Bar:</b> Thanh công cụ tiện ích ở trên đầu (Undo/Redo, đổi Heading, In đậm/nghiêng/gạch chân, Highlight, Thêm nhanh Ảnh/Video/Bảng/Tabs, Nhân bản & Xóa khối, Đếm từ).<br/>• <b>Floating Action Bar:</b> Rê chuột qua bất kỳ khối nào để thấy thanh action nổi góc phải: [+] Thêm bên dưới, [📄] Nhân bản, [⬆/⬇] Di chuyển, [📋] Sao chép, [🗑] Xóa.<br/>• <b>Nút [+] và [⠿] bên lề to hơn 46%</b>: Kích thước 38px chuẩn cảm ứng, bo góc 10px, hiệu ứng hover rõ ràng.<br/>• <b>Menu tùy biến [⠿] (Block Tunes):</b> Tích hợp sẵn Nhân bản (Duplicate), Chèn trên/dưới, Sao chép, Xóa trực tiếp.', type: 'primary' } },
-          { type: 'header', data: { text: 'Available Block Types', level: 3 } },
-          { type: 'list', data: { style: 'unordered', items: [
-            { content: '📝 Text blocks: Paragraph, Heading (H1-H6), Quote, Warning, Alert, Toggle', items: [] },
-            { content: '🖼 Media blocks: Image, Video, Audio, Gallery, File Attachment', items: [] },
-            { content: '📊 Layout blocks: Columns, Table, Tabs', items: [] },
-            { content: '🔗 Embed blocks: YouTube, CodePen, Social media, iFrame, Map', items: [] },
-            { content: '💻 Code blocks: Code with syntax highlighting, Raw HTML', items: [] },
-            { content: '🔬 Advanced: Math/LaTeX, Mermaid diagrams, Drawing canvas', items: [] },
-          ] } },
-          { type: 'delimiter', data: {} },
-          { type: 'paragraph', data: { text: '👉 Thử rê chuột vào khối này hoặc dùng thanh công cụ ở trên để thao tác! 👇' } },
-        ],
-      },
-      onChange: (data) => {
-        console.log('Editor changed:', data.blocks.length, 'blocks');
-      },
-      onReady: () => {
-        console.log('✅ @duxbo/block-editor is ready!');
-      },
-    });
+    const initialData = {
+      blocks: [
+        { type: 'header', data: { text: 'Welcome to @duxbo/block-editor 🎉', level: 1 } },
+        { type: 'paragraph', data: { text: '🚀 <b>Trải nghiệm chỉnh sửa chuẩn doanh nghiệp</b> với hệ thống Action đa tầng, kích thước to rõ, dễ bấm và đầy đủ tiện ích.' } },
+        { type: 'alert', data: { message: '💡 <b>Các tính năng Action mới:</b><br/>• <b>Top Quick Action Bar:</b> Thanh công cụ tiện ích ở trên đầu (Undo/Redo, đổi Heading, In đậm/nghiêng/gạch chân, Highlight, Thêm nhanh Ảnh/Video/Bảng/Tabs, Nhân bản & Xóa khối, Đếm từ).<br/>• <b>Floating Action Bar:</b> Rê chuột qua bất kỳ khối nào để thấy thanh action nổi góc phải: [+] Thêm bên dưới, [📄] Nhân bản, [⬆/⬇] Di chuyển, [📋] Sao chép, [🗑] Xóa.<br/>• <b>Nút [+] và [⠿] bên lề to hơn 46%</b>: Kích thước 38px chuẩn cảm ứng, bo góc 10px, hiệu ứng hover rõ ràng.<br/>• <b>Menu tùy biến [⠿] (Block Tunes):</b> Tích hợp sẵn Nhân bản (Duplicate), Chèn trên/dưới, Sao chép, Xóa trực tiếp.', type: 'primary' } },
+        { type: 'header', data: { text: 'Available Block Types', level: 3 } },
+        { type: 'list', data: { style: 'unordered', items: [
+          { content: '📝 Text blocks: Paragraph, Heading (H1-H6), Quote, Warning, Alert, Toggle', items: [] },
+          { content: '🖼 Media blocks: Image, Video, Audio, Gallery, File Attachment', items: [] },
+          { content: '📊 Layout blocks: Columns, Table, Tabs', items: [] },
+          { content: '🔗 Embed blocks: YouTube, CodePen, Social media, iFrame, Map', items: [] },
+          { content: '💻 Code blocks: Code with syntax highlighting, Raw HTML', items: [] },
+          { content: '🔬 Advanced: Math/LaTeX, Mermaid diagrams, Drawing canvas', items: [] },
+        ] } },
+        { type: 'delimiter', data: {} },
+        { type: 'paragraph', data: { text: '👉 Thử rê chuột vào khối này hoặc dùng thanh công cụ ở trên để thao tác! 👇' } },
+      ],
+    };
+
+    function createEditor(locale, theme, data) {
+      return new BlockEditor({
+        holder: 'editor-container',
+        theme,
+        locale,
+        placeholder: 'Type "/" for commands, or start writing...',
+        data,
+        onChange: (data) => {
+          console.log('Editor changed:', data.blocks.length, 'blocks');
+        },
+        onReady: () => {
+          console.log('✅ @duxbo/block-editor is ready!');
+        },
+      });
+    }
+
+    let editor = createEditor(currentLocale, currentTheme, initialData);
 
     // Expose to window for button handlers
     window.editorInstance = editor;
@@ -275,6 +281,7 @@
     };
 
     window.clearEditor = async () => {
+      if (!confirm('Clear all content? This cannot be undone.')) return;
       await editor.clear();
     };
 
@@ -290,8 +297,14 @@
       }
     };
 
-    window.switchLocale = () => {
-      alert('To switch locale, the editor needs to be re-initialized.\nSet locale: "vi" or "en" in the constructor config.');
+    window.switchLocale = async () => {
+      currentLocale = currentLocale === 'en' ? 'vi' : 'en';
+      const data = await editor.save();
+      editor.destroy();
+      editor = createEditor(currentLocale, currentTheme, data);
+      window.editorInstance = editor;
+      const btn = document.querySelector('[onclick="switchLocale()"]');
+      if (btn) btn.textContent = currentLocale === 'vi' ? '🌐 VI ✓' : '🌐 EN ✓';
     };
 
     window.showOutputTab = (type) => {

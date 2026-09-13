@@ -62,18 +62,48 @@
    ENLARGED & PROMINENT TOOLBAR ACTIONS
    ============================================ */
 
-/* Toolbar actions container (+ and 6-dots button) */
+/* Toolbar actions container (+ and 6-dots button).
+   Editor.js positions this container with an inline `left: -Npx`, computed
+   from a measured width that doesn't match what it becomes once our CSS
+   enlarges the buttons — the container ends up positioned far to the left
+   of the actual gutter (observed ~400px off). `justify-content` alone can't
+   fix this since the whole box is already mispositioned before its content
+   is laid out. Override with `right` positioning instead, which is
+   independent of Editor.js's own (stale) width measurement. */
 .be-editor .ce-toolbar__actions {
   display: flex !important;
   align-items: center !important;
-  gap: 8px !important;
-  padding-right: 12px !important;
+  justify-content: flex-end !important;
+  gap: 2px !important;
+  padding-right: 0 !important;
+  /* Editor.js's own `right: 100%` positioning is sensitive to its own width
+     measurement, which is easy to throw off (see the min-width fix above).
+     translateX(-100%) is self-referential — it always shifts the box by
+     exactly its own rendered width, landing its right edge flush with the
+     gutter regardless of what that width actually is. */
+  left: 0 !important;
+  right: auto !important;
+  transform: translateX(-100%) !important;
 }
 
-/* The PLUS (+) Button — Made 46% larger with modern button styling */
+/* An always-present empty placeholder inside .ce-toolbar__actions that
+   still consumes flex layout width even with no content — squeeze it out
+   so it doesn't push the +/⠿ buttons further into the (already tight)
+   left gutter than necessary. */
+.be-editor .ce-toolbar__actions > .ce-settings:empty {
+  width: 0 !important;
+  min-width: 0 !important;
+  margin: 0 !important;
+  overflow: hidden !important;
+}
+
+/* The PLUS (+) Button. Sized to comfortably fit the left gutter Editor.js
+   reserves for it — bigger sizes (this was 38px) push the button (and the
+   settings/drag-handle button beside it) past the available space and off
+   the left edge of the viewport; see .ce-toolbar__actions below. */
 .be-editor .ce-toolbar__plus {
-  width: 38px !important;
-  height: 38px !important;
+  width: 26px !important;
+  height: 26px !important;
   background: var(--be-bg-secondary) !important;
   border: 1px solid var(--be-border) !important;
   border-radius: 10px !important;
@@ -87,8 +117,8 @@
 }
 
 .be-editor .ce-toolbar__plus svg {
-  width: 20px !important;
-  height: 20px !important;
+  width: 16px !important;
+  height: 16px !important;
   stroke-width: 2.2px !important;
 }
 
@@ -100,10 +130,10 @@
   box-shadow: 0 4px 14px rgba(59, 130, 246, 0.35) !important;
 }
 
-/* The SETTINGS / DRAG HANDLE Button (6-dots) — Made 46% larger */
+/* The SETTINGS / DRAG HANDLE Button (6-dots) */
 .be-editor .ce-toolbar__settings-btn {
-  width: 38px !important;
-  height: 38px !important;
+  width: 26px !important;
+  height: 26px !important;
   background: var(--be-bg-secondary) !important;
   border: 1px solid var(--be-border) !important;
   border-radius: 10px !important;
@@ -117,8 +147,8 @@
 }
 
 .be-editor .ce-toolbar__settings-btn svg {
-  width: 20px !important;
-  height: 20px !important;
+  width: 16px !important;
+  height: 16px !important;
 }
 
 .be-editor .ce-toolbar__settings-btn:hover {
@@ -203,9 +233,18 @@
 
 /* ============================================
    ENLARGED POPOVER & SETTINGS MENU
+
+   A closed popover (e.g. the toolbox trigger, always present inside
+   .ce-toolbar__actions even before the "+" is clicked) stays in the DOM
+   without `position: absolute` on the outer .ce-popover element — only its
+   .ce-popover__container child is taken out of flow. Styling `.ce-popover`
+   unconditionally with `min-width: 300px` therefore reserves that width
+   *in-flow* even while closed, inflating .ce-toolbar__actions and pushing
+   the +/⠿ buttons far outside the visible gutter. Scope to `--opened`,
+   which is only added while the popover is actually shown.
    ============================================ */
 
-.be-editor .ce-popover {
+.be-editor .ce-popover--opened {
   min-width: 300px !important;
   max-width: 340px !important;
   background: var(--be-bg) !important;

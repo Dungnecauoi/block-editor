@@ -758,6 +758,10 @@ export class BlockEditor {
       this.hoverActions.destroy();
       this.hoverActions = null;
     }
+    if (this.topToolbar) {
+      this.topToolbar.destroy();
+      this.topToolbar = null;
+    }
     if (this.findReplace) {
       this.findReplace.detach();
       this.findReplace = null;
