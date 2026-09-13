@@ -10,6 +10,8 @@
  * `renderActions()` inline-tool API, so it's guaranteed to match what's
  * actually installed.
  */
+import { positionFixedPanel } from '../../utils/position-panel';
+
 const DEFAULT_COLORS = [
   '#EF4444', '#F59E0B', '#10B981', '#3B82F6',
   '#8B5CF6', '#EC4899', '#111827', '#6B7280',
@@ -56,6 +58,12 @@ export default class TextColorTool {
   renderActions(): HTMLElement {
     const wrapper = document.createElement('div');
     wrapper.classList.add('be-text-color-actions');
+    wrapper.style.position = 'fixed';
+    wrapper.style.visibility = 'hidden';
+    setTimeout(() => {
+      if (this.button) positionFixedPanel(this.button, wrapper, 220, 44);
+      wrapper.style.visibility = 'visible';
+    }, 0);
 
     this.colors.forEach((color) => {
       const swatch = document.createElement('button');

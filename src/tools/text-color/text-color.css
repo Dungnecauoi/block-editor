@@ -4,7 +4,13 @@
   gap: 6px;
   padding: 8px 10px;
   flex-wrap: wrap;
-  max-width: 260px;
+  width: 220px;
+  max-width: calc(100vw - 24px);
+  background: var(--be-bg, #fff);
+  border: 1px solid var(--be-border, #e5e7eb);
+  border-radius: 10px;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.16);
+  z-index: 50;
 }
 .be-text-color-swatch {
   width: 22px;

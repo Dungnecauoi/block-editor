@@ -47,7 +47,6 @@ import CodeFlask from '@calumk/editorjs-codeflask';
 // @ts-ignore
 import ToggleBlock from 'editorjs-toggle-block';
 // @ts-ignore
-import Hyperlink from 'editorjs-hyperlink';
 // @ts-ignore
 import AlignmentTune from 'editorjs-text-alignment-blocktune';
 // @ts-ignore
@@ -73,6 +72,7 @@ import QRCodeTool from './tools/qrcode';
 import SignatureTool from './tools/signature';
 import ChartTool from './tools/chart';
 import TextColorTool from './tools/text-color';
+import HyperlinkTool from './tools/hyperlink';
 
 // Block tunes
 import BlockActionsTune from './tunes/block-actions';
@@ -85,6 +85,7 @@ import { FindReplacePlugin } from './plugins/find-replace';
 import { TableOfContents } from './plugins/table-of-contents';
 import { EmojiPicker } from './plugins/emoji-picker';
 import { MediaLibrary } from './plugins/media-library';
+import { InlineToolbarClamp } from './plugins/inline-toolbar-clamp';
 import { diffMediaChanges, type MediaChange } from './utils/media-diff';
 
 // Parsers
@@ -119,6 +120,7 @@ import './tools/qrcode/qrcode.css';
 import './tools/signature/signature.css';
 import './tools/chart/chart.css';
 import './tools/text-color/text-color.css';
+import './tools/hyperlink/hyperlink.css';
 import './plugins/slash-command/slash-command.css';
 import './plugins/find-replace/find-replace.css';
 import './plugins/table-of-contents/table-of-contents.css';
@@ -141,6 +143,7 @@ export class BlockEditor {
   private hoverActions: BlockHoverActions | null = null;
   private findReplace: FindReplacePlugin | null = null;
   private toc: TableOfContents | null = null;
+  private inlineToolbarClamp: InlineToolbarClamp | null = null;
   private emojiPicker: EmojiPicker | null = null;
   private mediaLibrary: MediaLibrary | null = null;
   private recentMedia: MediaItem[] = [];
@@ -252,6 +255,10 @@ export class BlockEditor {
         if (this.config.showFindReplace !== false && this.wrapperElement) {
           this.findReplace = new FindReplacePlugin(this.wrapperElement);
           this.findReplace.attach();
+        }
+        if (this.wrapperElement) {
+          this.inlineToolbarClamp = new InlineToolbarClamp(this.wrapperElement);
+          this.inlineToolbarClamp.attach();
         }
         if (this.wrapperElement) {
           this.emojiPicker = new EmojiPicker(this.wrapperElement);
@@ -539,8 +546,8 @@ export class BlockEditor {
 
     if (isEnabled('hyperlink')) {
       tools.hyperlink = {
-        class: Hyperlink,
-        config: getConfig('hyperlink', { shortcut: 'CMD+L', target: '_blank', rel: 'nofollow', availableTargets: ['_blank', '_self'], availableRels: ['nofollow', 'noreferrer'] }),
+        class: HyperlinkTool,
+        config: getConfig('hyperlink', { availableTargets: ['_self', '_blank'], availableRels: ['', 'nofollow', 'noreferrer'] }),
       };
     }
 
@@ -754,6 +761,10 @@ export class BlockEditor {
     if (this.findReplace) {
       this.findReplace.detach();
       this.findReplace = null;
+    }
+    if (this.inlineToolbarClamp) {
+      this.inlineToolbarClamp.detach();
+      this.inlineToolbarClamp = null;
     }
     if (this.toc) {
       this.toc.detach();
