@@ -43,7 +43,13 @@ export class InlineToolbarClamp {
     const toolbar = this.container.querySelector<HTMLElement>('.ce-inline-toolbar');
     if (!toolbar) return;
 
-    const rect = toolbar.getBoundingClientRect();
+    // The wrapper (`.ce-inline-toolbar`, which carries the inline left/top
+    // style we can safely adjust) is not the same box as the visible card
+    // (`.ce-popover__container`, positioned relative to it) — the card can
+    // extend well past the wrapper's own small box in any direction, so it
+    // has to be what we measure, even though we still correct the wrapper.
+    const card = toolbar.querySelector<HTMLElement>('.ce-popover__container') || toolbar;
+    const rect = card.getBoundingClientRect();
     const margin = 8;
     let deltaX = 0;
     let deltaY = 0;
@@ -56,6 +62,8 @@ export class InlineToolbarClamp {
 
     if (rect.top < margin) {
       deltaY = margin - rect.top;
+    } else if (rect.bottom > window.innerHeight - margin) {
+      deltaY = window.innerHeight - margin - rect.bottom;
     }
 
     if (deltaX === 0 && deltaY === 0) return;
