@@ -49,8 +49,6 @@ import ToggleBlock from 'editorjs-toggle-block';
 // @ts-ignore
 import Hyperlink from 'editorjs-hyperlink';
 // @ts-ignore
-import ColorPlugin from 'editorjs-text-color-plugin';
-// @ts-ignore
 import AlignmentTune from 'editorjs-text-alignment-blocktune';
 // @ts-ignore
 import Tooltip from 'editorjs-tooltip';
@@ -74,6 +72,7 @@ import PageBreakTool from './tools/page-break';
 import QRCodeTool from './tools/qrcode';
 import SignatureTool from './tools/signature';
 import ChartTool from './tools/chart';
+import TextColorTool from './tools/text-color';
 
 // Block tunes
 import BlockActionsTune from './tunes/block-actions';
@@ -119,6 +118,7 @@ import './tools/page-break/page-break.css';
 import './tools/qrcode/qrcode.css';
 import './tools/signature/signature.css';
 import './tools/chart/chart.css';
+import './tools/text-color/text-color.css';
 import './plugins/slash-command/slash-command.css';
 import './plugins/find-replace/find-replace.css';
 import './plugins/table-of-contents/table-of-contents.css';
@@ -546,11 +546,15 @@ export class BlockEditor {
 
     if (isEnabled('Color')) {
       tools.Color = {
-        class: ColorPlugin,
-        config: getConfig('Color', {
-          colorCollections: ['#EC7878', '#9C27B0', '#673AB7', '#3F51B5', '#0070FF', '#03A9F4', '#00BCD4', '#4CAF50', '#8BC34A', '#CDDC39', '#FFF', '#FF9800', '#FF5722', '#795548', '#607D8B', '#000000'],
-          defaultColor: '#FF1300', type: 'text', customPicker: true,
-        }),
+        class: TextColorTool,
+        config: getConfig('Color', { type: 'text' }),
+      };
+    }
+
+    if (isEnabled('highlightColor')) {
+      tools.highlightColor = {
+        class: TextColorTool,
+        config: getConfig('highlightColor', { type: 'background' }),
       };
     }
 

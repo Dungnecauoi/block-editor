@@ -56,6 +56,7 @@ export const en: LocaleMessages = {
     Marker: 'Marker',
     'Inline Code': 'Inline Code',
     'Text Color': 'Text Color',
+    'Highlight Color': 'Highlight Color',
     'Change Case': 'Change Case',
     Tooltip: 'Tooltip',
   },

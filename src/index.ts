@@ -48,6 +48,7 @@ export { default as PageBreakTool } from './tools/page-break';
 export { default as QRCodeTool } from './tools/qrcode';
 export { default as SignatureTool } from './tools/signature';
 export { default as ChartTool } from './tools/chart';
+export { default as TextColorTool } from './tools/text-color';
 
 // Plugins (individually exportable)
 export { FindReplacePlugin } from './plugins/find-replace';

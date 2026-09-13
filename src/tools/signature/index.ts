@@ -72,19 +72,25 @@ export default class SignatureTool {
       img.src = this.data.dataUrl;
     }
 
-    this.canvas.addEventListener('mousedown', (e) => this._start(e.offsetX, e.offsetY));
-    this.canvas.addEventListener('mousemove', (e) => this._move(e.offsetX, e.offsetY));
+    this.canvas.addEventListener('mousedown', (e) => {
+      const { x, y } = this._getCoords(e.clientX, e.clientY);
+      this._start(x, y);
+    });
+    this.canvas.addEventListener('mousemove', (e) => {
+      const { x, y } = this._getCoords(e.clientX, e.clientY);
+      this._move(x, y);
+    });
     this.canvas.addEventListener('mouseup', () => this._end());
     this.canvas.addEventListener('mouseleave', () => this._end());
 
     this.canvas.addEventListener('touchstart', (e) => {
       e.preventDefault();
-      const { x, y } = this._touchCoords(e);
+      const { x, y } = this._getCoords(e.touches[0].clientX, e.touches[0].clientY);
       this._start(x, y);
     });
     this.canvas.addEventListener('touchmove', (e) => {
       e.preventDefault();
-      const { x, y } = this._touchCoords(e);
+      const { x, y } = this._getCoords(e.touches[0].clientX, e.touches[0].clientY);
       this._move(x, y);
     });
     this.canvas.addEventListener('touchend', () => this._end());
@@ -93,10 +99,13 @@ export default class SignatureTool {
     return this.wrapper;
   }
 
-  private _touchCoords(e: TouchEvent): { x: number; y: number } {
+  /** Maps a client-space point to the canvas's internal pixel space (which can
+   * differ from its displayed CSS size since it's stretched to 100% width). */
+  private _getCoords(clientX: number, clientY: number): { x: number; y: number } {
     const rect = this.canvas!.getBoundingClientRect();
-    const touch = e.touches[0];
-    return { x: touch.clientX - rect.left, y: touch.clientY - rect.top };
+    const scaleX = this.canvas!.width / rect.width;
+    const scaleY = this.canvas!.height / rect.height;
+    return { x: (clientX - rect.left) * scaleX, y: (clientY - rect.top) * scaleY };
   }
 
   private _start(x: number, y: number): void {

@@ -56,6 +56,7 @@ export const vi: LocaleMessages = {
     Marker: 'Bôi đậm',
     'Inline Code': 'Mã nội tuyến',
     'Text Color': 'Màu chữ',
+    'Highlight Color': 'Màu tô sáng',
     'Change Case': 'Đổi kiểu chữ',
     Tooltip: 'Chú giải',
   },
