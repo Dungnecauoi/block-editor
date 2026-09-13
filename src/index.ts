@@ -13,6 +13,7 @@ export type {
   OutputBlockData,
   UploadAdapter,
   UploadResponse,
+  MediaItem,
   ThemeConfig,
   LocaleConfig,
   LocaleMessages,
@@ -24,6 +25,10 @@ export type {
 // Parsers
 export { renderToHTML } from './parsers/html-renderer';
 export { renderToMarkdown } from './parsers/markdown-renderer';
+
+// Media change tracking (also usable standalone, e.g. on a backend)
+export { diffMediaChanges, DEFAULT_MEDIA_BLOCK_TYPES } from './utils/media-diff';
+export type { MediaChange } from './utils/media-diff';
 
 // Upload adapters
 export { FetchUploadAdapter } from './adapters/upload-adapter';
@@ -39,6 +44,16 @@ export { default as DrawingTool } from './tools/drawing';
 export { default as IframeTool } from './tools/iframe';
 export { default as MapTool } from './tools/map';
 export { default as SocialEmbedTool } from './tools/social-embed';
+export { default as PageBreakTool } from './tools/page-break';
+export { default as QRCodeTool } from './tools/qrcode';
+export { default as SignatureTool } from './tools/signature';
+export { default as ChartTool } from './tools/chart';
+
+// Plugins (individually exportable)
+export { FindReplacePlugin } from './plugins/find-replace';
+export { TableOfContents } from './plugins/table-of-contents';
+export { EmojiPicker } from './plugins/emoji-picker';
+export { MediaLibrary } from './plugins/media-library';
 
 // i18n
 export { en as localeEn } from './config/i18n/en';

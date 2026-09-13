@@ -2,21 +2,26 @@
  * HTML Renderer — Converts Editor.js JSON output to semantic HTML
  */
 import type { OutputData, OutputBlockData } from '../types';
+import { slugify } from '../utils/slugify';
 
 export function renderToHTML(data: OutputData): string {
   if (!data || !data.blocks) return '';
-  return data.blocks.map(block => renderBlock(block)).join('\n');
+  const usedSlugs = new Set<string>();
+  return data.blocks.map(block => renderBlock(block, usedSlugs)).join('\n');
 }
 
-function renderBlock(block: OutputBlockData): string {
+function renderBlock(block: OutputBlockData, usedSlugs: Set<string>): string {
   const d = block.data as any;
 
   switch (block.type) {
     case 'paragraph':
       return `<p>${d.text || ''}</p>`;
 
-    case 'header':
-      return `<h${d.level || 2}>${d.text || ''}</h${d.level || 2}>`;
+    case 'header': {
+      const level = d.level || 2;
+      const id = slugify(d.text || '', usedSlugs);
+      return `<h${level} id="${id}">${d.text || ''}</h${level}>`;
+    }
 
     case 'list': {
       const tag = d.style === 'ordered' || d.type === 'ordered' ? 'ol' : 'ul';
@@ -117,6 +122,20 @@ function renderBlock(block: OutputBlockData): string {
 
     case 'toggle':
       return `<details><summary>${d.text || 'Toggle'}</summary><div>${(d.items || []).join('')}</div></details>`;
+
+    case 'pageBreak':
+      return '<div class="page-break" style="page-break-after: always;"></div>';
+
+    case 'qrcode':
+      return `<div class="qrcode" data-text="${_escapeAttr(d.text || '')}">${d.text || ''}</div>`;
+
+    case 'signature':
+      return d.dataUrl ? `<img src="${d.dataUrl}" alt="Signature" class="signature">` : '';
+
+    case 'chart': {
+      const rows = (d.rows || []).map((r: any) => `<tr><td>${r.label}</td><td>${r.value}</td></tr>`).join('');
+      return `<div class="chart" data-chart-type="${d.chartType || 'bar'}">${d.title ? `<h4>${d.title}</h4>` : ''}<table>${rows}</table></div>`;
+    }
 
     default:
       return `<!-- Unknown block type: ${block.type} -->`;

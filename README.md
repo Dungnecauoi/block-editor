@@ -1,6 +1,6 @@
 # @duxbo/block-editor
 
-> Enterprise-grade, batteries-included block editor built on top of [Editor.js](https://editorjs.io). Packaged with **30+ blocks & inline tools**, productivity plugins (slash commands, drag & drop, undo/redo), theme engine, built-in English & Vietnamese i18n, customizable upload adapters, and HTML/Markdown export parsers.
+> Enterprise-grade, batteries-included block editor built on top of [Editor.js](https://editorjs.io). Packaged with **35+ blocks & inline tools**, productivity plugins (slash commands, find & replace, table of contents, emoji picker, media library, drag & drop, undo/redo, autosave), theme engine, built-in English & Vietnamese i18n, customizable upload adapters, and HTML/Markdown export parsers.
 
 [![npm version](https://img.shields.io/npm/v/@duxbo/block-editor.svg?style=flat-square)](https://www.npmjs.com/package/@duxbo/block-editor)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](LICENSE)
@@ -14,10 +14,15 @@
 - **🛠️ 30+ Block & Inline Tools**:
   - *Standard*: Paragraph, Header (H1-H6), Nested List, Checklist, Quote, Warning, Delimiter, Raw HTML, Table.
   - *Media*: Image (upload + URL), Video (local + streaming), Audio player, Multi-image Gallery, File Attachments.
-  - *Advanced*: Multi-column layouts, Toggle/Accordion, Tabs container, Math/LaTeX equations (KaTeX), Mermaid diagrams, Drawing canvas.
+  - *Advanced*: Multi-column layouts, Toggle/Accordion, Tabs container, Math/LaTeX equations (KaTeX), Mermaid diagrams, Drawing canvas, Page Break, QR Code, Signature pad, Bar/Line/Pie Chart.
   - *Embeds*: YouTube, Vimeo, CodePen, Social media (Twitter/X, Instagram, TikTok), Google Maps/OpenStreetMap, Custom iFrame.
   - *Inline Formatting*: Marker, Inline Code, Underline, Text Color, Background Color, Tooltips, Case Transform, Text Alignment tune, Indent tune.
 - **⌨️ Slash Commands (`/`)**: Notion-style quick menu to search and insert blocks without taking hands off keyboard.
+- **🔍 Find & Replace (`Ctrl+F`)**: Search and replace text across every block, with match navigation and case-sensitive toggle.
+- **📑 Table of Contents**: Optional floating outline panel auto-generated from headings, with click-to-jump navigation and stable anchor IDs (also embedded in HTML export).
+- **😀 Emoji Picker & 🗂️ Media Library**: Quick emoji insertion popover, and a picker to reuse previously uploaded images/videos/files instead of re-uploading.
+- **💾 Autosave**: Optional debounced autosave to `localStorage` or a custom callback, with automatic draft restore on reload.
+- **👁️ Preview / Read-only Toggle**: One-click switch between editing and a clean read-only preview.
 - **🎯 Drag & Drop & History**: Native block reordering handle and full Undo / Redo history (`Ctrl+Z`, `Ctrl+Y`).
 - **🎨 Modern Theme Engine**: Switch between `default` (Light), `dark`, and `minimal` themes on the fly, or override with CSS Custom Properties.
 - **🌐 Built-in i18n**: Out-of-the-box support for **Vietnamese** (`vi`) and **English** (`en`), extensible to any language.
@@ -192,9 +197,72 @@ The endpoint is expected to return:
 | `enableSlashCommand` | `boolean` | `true` | Enable `/` slash command popup |
 | `enableDragDrop` | `boolean` | `true` | Enable block drag & drop handles |
 | `enableUndoRedo` | `boolean` | `true` | Enable undo/redo history |
+| `showFindReplace` | `boolean` | `true` | Enable Find & Replace (`Ctrl+F`) |
+| `showTableOfContents` | `boolean` | `false` | Show the floating outline panel |
+| `showMediaLibrary` | `boolean` | `true` | Show the Media Library picker button |
+| `autosave` | `{ enabled, interval?, key?, onSave? }` | `undefined` | Debounced autosave to `localStorage` and/or a callback |
+| `toolbar` | `TopToolbarConfig` | `undefined` | Per-section on/off switches for the top toolbar (see below) |
+| `trackMedia` | `{ enabled?, blockTypes? }` | `undefined` | Config for `saveWithMediaChanges()` (see below) |
 | `tools` | `Record<string, any>` | `undefined` | Custom or overridden tool configs |
 | `onReady` | `() => void` | `undefined` | Ready callback |
 | `onChange` | `(data: OutputData) => void` | `undefined` | Content changed callback |
+
+---
+
+## 🎛️ Toolbar Customization
+
+Every section and button of the top toolbar can be toggled independently via `toolbar`, on top of the top-level `showToolbar` (whole bar) / `showFindReplace` / `showTableOfContents` / `showMediaLibrary` switches. Every block/inline tool is toggled the same way via `tools: { toolName: false }`.
+
+```typescript
+const editor = new BlockEditor({
+  holder: 'editor-container',
+  showFindReplace: true,       // Ctrl+F shortcut still works even if the button is hidden
+  showTableOfContents: false,
+  showMediaLibrary: true,
+  toolbar: {
+    showHistory: true,        // Undo/Redo
+    showHeadings: true,       // Block type dropdown
+    showFormatting: true,     // Bold/Italic/Underline/Strike/Highlight/Clear
+    showAlignment: true,      // (reserved)
+    showLists: true,          // Bullet/Numbered/Checklist
+    showInsertMenu: true,     // Image/Video/Table/Tabs/Columns/Divider/Page Break/QR/Chart/Sign
+    showBlockActions: true,   // Duplicate/Delete current block
+    showStats: true,          // Word/char count
+    showFullscreen: true,
+    showUtilities: true,      // Find & Replace / Emoji / Media Library icons
+    showPreviewToggle: true,  // Read-only preview eye icon
+  },
+  tools: {
+    mermaid: false,           // disable a single block tool
+    chart: { config: { /* ... */ } },
+  },
+});
+```
+
+---
+
+## 🖼️ Media Change Tracking (for backend cleanup)
+
+When a block's image/video/audio/attachment/gallery file is added, removed, or replaced, `saveWithMediaChanges()` returns a `mediaChanges` list alongside the usual JSON so your backend knows exactly which uploaded files became orphaned:
+
+```typescript
+const { data, mediaChanges } = await editor.saveWithMediaChanges();
+// mediaChanges: [{ blockId, blockType, changeType: 'added'|'removed'|'modified', old, new }, ...]
+
+const res = await fetch('/api/articles/123', {
+  method: 'PUT',
+  body: JSON.stringify({ data, mediaChanges }),
+});
+
+if (res.ok) {
+  // Only advance the baseline after the backend actually persisted it.
+  editor.commitMediaBaseline(data);
+}
+```
+
+**Diffs against the last *committed* save, not every keystroke.** If a user swaps the same image block 3 times before ever saving, `mediaChanges` still reports one entry with `old` pointing at the file that's actually in your DB (the first one) and `new` pointing at the final choice — the 2nd/3rd intermediate files never existed in the DB and never appear as `old`. If your backend save fails, simply don't call `commitMediaBaseline()` — the next diff will still be computed against the last known-good state, so nothing is missed.
+
+Tracked block types by default: `image`, `simpleImage`, `video`, `audio`, `attaches`, `gallery` (a gallery's individual images are diffed by URL, each add/remove as its own entry). Customize with `trackMedia: { blockTypes: [...] }`, or set `trackMedia: { enabled: false }` to always get an empty list. `diffMediaChanges(oldData, newData)` is also exported standalone if you'd rather compute this diff on the backend from two JSON blobs.
 
 ---
 
@@ -220,7 +288,16 @@ const markdownString = await editor.toMarkdown();
 editor.setTheme('dark');
 
 // Dynamic read-only toggle
-await editor.readOnly.toggle();
+await editor.toggleReadOnly();
+
+// Open Find & Replace / Media Library, toggle the outline panel
+editor.openFindReplace();
+editor.openMediaLibrary();
+editor.toggleTableOfContents();
+
+// Save + diff which media files changed since the last confirmed save
+const { data, mediaChanges } = await editor.saveWithMediaChanges();
+editor.commitMediaBaseline(data); // call only after your backend confirms the save
 
 // Events
 editor.on('change', (data) => console.log('Changed', data));
@@ -248,6 +325,14 @@ import {
   IframeTool,
   MapTool,
   SocialEmbedTool,
+  PageBreakTool,
+  QRCodeTool,
+  SignatureTool,
+  ChartTool,
+  FindReplacePlugin,
+  TableOfContents,
+  EmojiPicker,
+  MediaLibrary,
   renderToHTML,
   renderToMarkdown,
 } from '@duxbo/block-editor';

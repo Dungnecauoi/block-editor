@@ -15,19 +15,30 @@ export interface TopToolbarConfig {
   showBlockActions?: boolean;
   showStats?: boolean;
   showFullscreen?: boolean;
+  showUtilities?: boolean;
+  showPreviewToggle?: boolean;
+}
+
+export interface TopToolbarCallbacks {
+  onFindReplace?: () => void;
+  onMediaLibrary?: () => void;
+  onEmojiButtonReady?: (btn: HTMLElement) => void;
 }
 
 export class TopToolbar {
   private editor: EditorJS;
   private container: HTMLElement;
   private config: TopToolbarConfig;
+  private callbacks: TopToolbarCallbacks;
   private wordsCountEl: HTMLElement | null = null;
   private charsCountEl: HTMLElement | null = null;
   private isFullscreen = false;
+  private isPreview = false;
 
-  constructor(editor: EditorJS, container: HTMLElement, config?: TopToolbarConfig) {
+  constructor(editor: EditorJS, container: HTMLElement, config?: TopToolbarConfig, callbacks?: TopToolbarCallbacks) {
     this.editor = editor;
     this.container = container;
+    this.callbacks = callbacks || {};
     this.config = {
       showHistory: true,
       showHeadings: true,
@@ -38,6 +49,8 @@ export class TopToolbar {
       showBlockActions: true,
       showStats: true,
       showFullscreen: true,
+      showUtilities: true,
+      showPreviewToggle: true,
       ...config,
     };
 
@@ -148,6 +161,38 @@ export class TopToolbar {
               <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line></svg>
               <span>Divider</span>
             </button>
+            <button type="button" class="be-tbar-btn be-tbar-btn--insert" data-action="insert-pagebreak" title="Insert Page Break (Ngắt trang)">
+              <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18" stroke-dasharray="3 3"></path></svg>
+              <span>Page Break</span>
+            </button>
+            <button type="button" class="be-tbar-btn be-tbar-btn--insert" data-action="insert-qrcode" title="Insert QR Code (Mã QR)">
+              <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2"><rect width="7" height="7" x="3" y="3" rx="1"></rect><rect width="7" height="7" x="14" y="3" rx="1"></rect><rect width="7" height="7" x="3" y="14" rx="1"></rect></svg>
+              <span>QR</span>
+            </button>
+            <button type="button" class="be-tbar-btn be-tbar-btn--insert" data-action="insert-chart" title="Insert Chart (Biểu đồ)">
+              <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"></path><rect width="3" height="8" x="7" y="10" fill="currentColor"></rect><rect width="3" height="12" x="12" y="6" fill="currentColor"></rect></svg>
+              <span>Chart</span>
+            </button>
+            <button type="button" class="be-tbar-btn be-tbar-btn--insert" data-action="insert-signature" title="Insert Signature (Chữ ký)">
+              <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 17c2-4 4-4 5-1s3 3 5-1 4-6 6-2"></path></svg>
+              <span>Sign</span>
+            </button>
+          </div>
+          <div class="be-toolbar-divider"></div>
+        ` : ''}
+
+        <!-- Utilities: Find & Replace, Emoji, Media Library -->
+        ${this.config.showUtilities ? `
+          <div class="be-toolbar-group">
+            <button type="button" class="be-tbar-btn" data-action="find-replace" title="Find &amp; Replace (Ctrl+F)">
+              <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            </button>
+            <button type="button" class="be-tbar-btn" data-action="emoji-picker" title="Insert Emoji (Chèn emoji)">
+              <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M8 14s1.5 2 4 2 4-2 4-2"></path><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line></svg>
+            </button>
+            <button type="button" class="be-tbar-btn" data-action="media-library" title="Media Library (Thư viện media)">
+              <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+            </button>
           </div>
           <div class="be-toolbar-divider"></div>
         ` : ''}
@@ -177,6 +222,12 @@ export class TopToolbar {
           </div>
         ` : ''}
 
+        ${this.config.showPreviewToggle ? `
+          <button type="button" class="be-tbar-btn be-tbar-btn--icon-only" data-action="toggle-preview" title="Toggle Preview / Read-only (Xem trước)">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8Z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+          </button>
+        ` : ''}
+
         ${this.config.showFullscreen ? `
           <button type="button" class="be-tbar-btn be-tbar-btn--icon-only" data-action="toggle-fullscreen" title="Toggle Fullscreen (Toàn màn hình)">
             <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg>
@@ -189,6 +240,11 @@ export class TopToolbar {
 
     this.wordsCountEl = bar.querySelector('#be-words-count');
     this.charsCountEl = bar.querySelector('#be-chars-count');
+
+    const emojiBtn = bar.querySelector('[data-action="emoji-picker"]') as HTMLElement | null;
+    if (emojiBtn && this.callbacks.onEmojiButtonReady) {
+      this.callbacks.onEmojiButtonReady(emojiBtn);
+    }
   }
 
   private attachListeners(): void {
@@ -269,6 +325,18 @@ export class TopToolbar {
       case 'insert-delimiter':
         this.insertBlock('delimiter', {});
         break;
+      case 'insert-pagebreak':
+        this.insertBlock('pageBreak', {});
+        break;
+      case 'insert-qrcode':
+        this.insertBlock('qrcode', { text: '' });
+        break;
+      case 'insert-chart':
+        this.insertBlock('chart', {});
+        break;
+      case 'insert-signature':
+        this.insertBlock('signature', {});
+        break;
       case 'duplicate-current':
         this.duplicateCurrentBlock();
         break;
@@ -277,6 +345,15 @@ export class TopToolbar {
         break;
       case 'toggle-fullscreen':
         this.toggleFullscreen();
+        break;
+      case 'toggle-preview':
+        this.togglePreview();
+        break;
+      case 'find-replace':
+        this.callbacks.onFindReplace?.();
+        break;
+      case 'media-library':
+        this.callbacks.onMediaLibrary?.();
         break;
     }
   }
@@ -355,6 +432,18 @@ export class TopToolbar {
     this.isFullscreen = !this.isFullscreen;
     const root = this.container.closest('.be-editor') || this.container;
     root.classList.toggle('be-editor--fullscreen', this.isFullscreen);
+  }
+
+  private async togglePreview(): Promise<void> {
+    try {
+      this.isPreview = await this.editor.readOnly.toggle();
+      const root = this.container.closest('.be-editor') || this.container;
+      root.classList.toggle('be-editor--preview', this.isPreview);
+      const btn = this.container.querySelector('[data-action="toggle-preview"]');
+      btn?.classList.toggle('be-tbar-btn--active', this.isPreview);
+    } catch (err) {
+      console.warn('Failed to toggle preview mode:', err);
+    }
   }
 
   private async updateStats(): Promise<void> {

@@ -96,6 +96,17 @@
   padding: 0;
 }
 
+.be-tbar-btn--active {
+  background: #eff6ff;
+  border-color: #93c5fd;
+  color: #2563eb;
+}
+
+.be-editor--preview .be-editor__content,
+.be-editor--preview .codex-editor {
+  opacity: 0.92;
+}
+
 .be-tbar-select {
   height: 36px;
   padding: 0 10px;

@@ -1,0 +1,28 @@
+.be-qrcode-tool {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin: 12px 0;
+  padding: 16px;
+  border: 1px solid var(--be-border, #e5e7eb);
+  border-radius: 8px;
+  background: var(--be-bg-secondary, #f9fafb);
+}
+.be-qrcode-tool__canvas { border-radius: 4px; background: #fff; }
+.be-qrcode-tool__input {
+  width: 100%;
+  max-width: 320px;
+  padding: 8px 12px;
+  border: 1px solid var(--be-border, #d1d5db);
+  border-radius: 6px;
+  font-size: 13px;
+  background: var(--be-bg, #fff);
+  color: var(--be-text, #1f2937);
+}
+.be-qrcode-tool__caption {
+  font-size: 12px;
+  color: var(--be-text-secondary, #6b7280);
+  word-break: break-all;
+  text-align: center;
+}

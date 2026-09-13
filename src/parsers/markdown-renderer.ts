@@ -110,6 +110,26 @@ function renderBlockMd(block: OutputBlockData): string {
     case 'toggle':
       return `<details>\n<summary>${stripHtml(d.text || 'Toggle')}</summary>\n\n${(d.items || []).map((i: string) => stripHtml(i)).join('\n')}\n</details>`;
 
+    case 'pageBreak':
+      return '<!-- pagebreak -->';
+
+    case 'qrcode':
+      return `📱 QR: ${d.text || ''}`;
+
+    case 'signature':
+      return d.dataUrl ? `![Signature](${d.dataUrl})` : '';
+
+    case 'chart': {
+      const rows = (d.rows || []) as Array<{ label: string; value: number }>;
+      const lines = rows.map((r) => `| ${r.label} | ${r.value} |`);
+      return [
+        d.title ? `**${stripHtml(d.title)}**` : '',
+        '| Label | Value |',
+        '| --- | --- |',
+        ...lines,
+      ].filter(Boolean).join('\n');
+    }
+
     default:
       return '';
   }

@@ -1,0 +1,28 @@
+.be-page-break {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 16px 0;
+  height: 1px;
+  border-top: 2px dashed var(--be-border, #d1d5db);
+  user-select: none;
+}
+.be-page-break span {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: var(--be-bg, #fff);
+  padding: 2px 12px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--be-text-secondary, #9ca3af);
+  border: 1px dashed var(--be-border, #d1d5db);
+  border-radius: 12px;
+}
+@media print {
+  .be-page-break { border: none; height: 0; page-break-after: always; break-after: page; }
+  .be-page-break span { display: none; }
+}

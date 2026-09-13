@@ -1,4 +1,5 @@
 import type EditorJS from '@editorjs/editorjs';
+import type { TopToolbarConfig } from '../ui/toolbar';
 
 // ============================================================
 // Core Types
@@ -42,6 +43,22 @@ export interface UploadAdapter {
    * Upload by URL (download then re-host)
    */
   uploadByUrl?(url: string): Promise<UploadResponse>;
+
+  /**
+   * List previously uploaded media for the Media Library picker
+   */
+  listMedia?(): Promise<MediaItem[]>;
+}
+
+// ============================================================
+// Media Library Types
+// ============================================================
+
+export interface MediaItem {
+  url: string;
+  name?: string;
+  type?: 'image' | 'video' | 'audio' | 'file';
+  thumbnail?: string;
 }
 
 // ============================================================
@@ -189,6 +206,57 @@ export interface BlockEditorConfig {
    */
   logLevel?: 'VERBOSE' | 'INFO' | 'WARN' | 'ERROR';
 
+  /**
+   * Show Find & Replace (Ctrl+F) (default: true)
+   */
+  showFindReplace?: boolean;
+
+  /**
+   * Show floating Table of Contents outline panel (default: false)
+   */
+  showTableOfContents?: boolean;
+
+  /**
+   * Show the Media Library picker button in the toolbar (default: true)
+   */
+  showMediaLibrary?: boolean;
+
+  /**
+   * Fine-grained on/off switches for every section/button of the top toolbar
+   * (history, headings, formatting, alignment, lists, insert menu, block
+   * actions, word/char stats, fullscreen, find/emoji/media utilities,
+   * preview toggle). Omit a key to keep its default (all `true`).
+   */
+  toolbar?: TopToolbarConfig;
+
+  /**
+   * Media change tracking. When you call `saveWithMediaChanges()`, the
+   * returned `mediaChanges` list diffs every media block (image, gallery,
+   * video, audio, attaches — configurable via `blockTypes`) against the
+   * last *committed* baseline (see `commitMediaBaseline()`), not against
+   * every intermediate keystroke — so N unsaved swaps of the same block
+   * collapse into one accurate {old, new} pair.
+   */
+  trackMedia?: {
+    /** Default: true */
+    enabled?: boolean;
+    /** Block types to diff. Default: image, simpleImage, video, audio, attaches, gallery */
+    blockTypes?: string[];
+  };
+
+  /**
+   * Autosave configuration. When enabled, calls `onAutosave`
+   * (or persists to localStorage when `key` is given) periodically.
+   */
+  autosave?: {
+    enabled?: boolean;
+    /** Debounce interval in ms (default: 2000) */
+    interval?: number;
+    /** localStorage key to persist to */
+    key?: string;
+    onSave?: (data: OutputData) => void;
+  };
+
   // ---- Callbacks ----
 
   /**
@@ -210,6 +278,7 @@ export type EditorEventType =
   | 'ready'
   | 'change'
   | 'save'
+  | 'autosave'
   | 'block-added'
   | 'block-removed'
   | 'block-moved'

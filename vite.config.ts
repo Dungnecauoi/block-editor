@@ -21,12 +21,13 @@ export default defineConfig({
     },
     rollupOptions: {
       // Keep heavy deps as external — they'll be loaded via dynamic import at runtime
-      external: ['mermaid', 'katex'],
+      external: ['mermaid', 'katex', 'qrcode'],
       output: {
         assetFileNames: 'style.css',
         globals: {
           mermaid: 'mermaid',
           katex: 'katex',
+          qrcode: 'QRCode',
         },
       },
     },
