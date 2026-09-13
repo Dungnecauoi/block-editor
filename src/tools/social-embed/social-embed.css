@@ -1,0 +1,11 @@
+.be-social-tool { margin: 12px 0; }
+.be-social-tool__embed { max-width: 550px; margin: 0 auto; }
+.be-social-tool__card { display: flex; align-items: center; gap: 12px; padding: 16px; background: var(--be-bg-secondary, #f9fafb); border: 1px solid var(--be-border, #e5e7eb); border-radius: 12px; }
+.be-social-tool__card-icon { font-size: 11px; font-weight: 700; color: var(--be-primary, #3b82f6); padding: 6px 10px; background: rgba(59,130,246,0.1); border-radius: 6px; }
+.be-social-tool__card-link { font-size: 14px; color: var(--be-primary, #3b82f6); text-decoration: none; word-break: break-all; }
+.be-social-tool__card-link:hover { text-decoration: underline; }
+.be-social-tool__input {
+  width: 100%; padding: 14px 18px; border: 2px dashed var(--be-border, #d1d5db); border-radius: 12px;
+  font-size: 14px; outline: none; text-align: center; background: var(--be-bg-secondary, #f9fafb); color: var(--be-text, #1f2937);
+}
+.be-social-tool__input:focus { border-color: var(--be-primary, #3b82f6); }

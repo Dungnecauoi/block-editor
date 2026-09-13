@@ -1,0 +1,20 @@
+.be-math-tool { margin: 12px 0; }
+.be-math-tool__preview {
+  padding: 16px; text-align: center; min-height: 40px;
+  background: var(--be-bg-secondary, #f9fafb); border-radius: 8px;
+  font-size: 18px; overflow-x: auto;
+}
+.be-math-tool__preview--error { color: #ef4444; font-family: monospace; font-size: 14px; }
+.be-math-tool__placeholder { color: var(--be-text-placeholder, #9ca3af); font-size: 14px; font-style: italic; }
+.be-math-tool__editor { margin-top: 10px; }
+.be-math-tool__input {
+  width: 100%; padding: 10px 14px; border: 1px solid var(--be-border, #d1d5db);
+  border-radius: 8px; font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  font-size: 14px; resize: vertical; outline: none;
+  background: var(--be-bg, #fff); color: var(--be-text, #1f2937);
+}
+.be-math-tool__input:focus { border-color: var(--be-primary, #3b82f6); box-shadow: 0 0 0 3px rgba(59,130,246,0.1); }
+.be-math-tool__toggle {
+  display: flex; align-items: center; gap: 6px; margin-top: 8px;
+  font-size: 13px; color: var(--be-text-secondary, #6b7280); cursor: pointer;
+}

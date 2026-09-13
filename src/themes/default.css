@@ -1,0 +1,289 @@
+/* ============================================
+   @duxbo/block-editor — Default Theme
+   ============================================ */
+
+:root {
+  --be-bg: #ffffff;
+  --be-bg-secondary: #f8fafc;
+  --be-bg-hover: #f1f5f9;
+  --be-text: #1e293b;
+  --be-text-secondary: #64748b;
+  --be-text-placeholder: #94a3b8;
+  --be-primary: #3b82f6;
+  --be-primary-hover: #2563eb;
+  --be-primary-alpha: rgba(59, 130, 246, 0.08);
+  --be-border: #e2e8f0;
+  --be-border-focus: #93c5fd;
+  --be-radius: 10px;
+  --be-font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --be-font-size: 16px;
+}
+
+.be-editor {
+  font-family: var(--be-font-family);
+  font-size: var(--be-font-size);
+  color: var(--be-text);
+  line-height: 1.7;
+  position: relative;
+}
+
+.be-editor .codex-editor {
+  max-width: 100%;
+}
+
+.be-editor .ce-block__content {
+  max-width: 100%;
+  margin: 0;
+  padding: 4px 24px;
+}
+
+.be-editor .ce-toolbar__content {
+  max-width: 100%;
+  margin: 0;
+}
+
+.be-editor .codex-editor__redactor {
+  padding-bottom: 160px !important;
+}
+
+/* Block selection & focus */
+.be-editor .ce-block--selected .ce-block__content {
+  background: var(--be-primary-alpha);
+  border-radius: var(--be-radius);
+}
+
+.be-editor .ce-block:hover .ce-block__content {
+  outline: 1px dashed rgba(59, 130, 246, 0.2);
+  outline-offset: 4px;
+  border-radius: var(--be-radius);
+}
+
+/* ============================================
+   ENLARGED & PROMINENT TOOLBAR ACTIONS
+   ============================================ */
+
+/* Toolbar actions container (+ and 6-dots button) */
+.be-editor .ce-toolbar__actions {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  padding-right: 12px !important;
+}
+
+/* The PLUS (+) Button — Made 46% larger with modern button styling */
+.be-editor .ce-toolbar__plus {
+  width: 38px !important;
+  height: 38px !important;
+  background: var(--be-bg-secondary) !important;
+  border: 1px solid var(--be-border) !important;
+  border-radius: 10px !important;
+  color: #475569 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.04) !important;
+  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  cursor: pointer !important;
+}
+
+.be-editor .ce-toolbar__plus svg {
+  width: 20px !important;
+  height: 20px !important;
+  stroke-width: 2.2px !important;
+}
+
+.be-editor .ce-toolbar__plus:hover {
+  background: var(--be-primary) !important;
+  border-color: var(--be-primary) !important;
+  color: #ffffff !important;
+  transform: scale(1.1) !important;
+  box-shadow: 0 4px 14px rgba(59, 130, 246, 0.35) !important;
+}
+
+/* The SETTINGS / DRAG HANDLE Button (6-dots) — Made 46% larger */
+.be-editor .ce-toolbar__settings-btn {
+  width: 38px !important;
+  height: 38px !important;
+  background: var(--be-bg-secondary) !important;
+  border: 1px solid var(--be-border) !important;
+  border-radius: 10px !important;
+  color: #475569 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.04) !important;
+  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  cursor: grab !important;
+}
+
+.be-editor .ce-toolbar__settings-btn svg {
+  width: 20px !important;
+  height: 20px !important;
+}
+
+.be-editor .ce-toolbar__settings-btn:hover {
+  background: var(--be-primary) !important;
+  border-color: var(--be-primary) !important;
+  color: #ffffff !important;
+  transform: scale(1.1) !important;
+  box-shadow: 0 4px 14px rgba(59, 130, 246, 0.35) !important;
+}
+
+/* ============================================
+   ENLARGED INLINE TOOLBAR (Text Selection)
+   ============================================ */
+
+.be-editor .ce-inline-toolbar {
+  height: 46px !important;
+  background: var(--be-bg) !important;
+  border: 1px solid var(--be-border) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12), 0 2px 6px rgba(0, 0, 0, 0.04) !important;
+  padding: 4px 6px !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 3px !important;
+}
+
+.be-editor .ce-inline-toolbar__buttons {
+  display: flex !important;
+  align-items: center !important;
+  gap: 3px !important;
+}
+
+.be-editor .ce-inline-tool {
+  width: 36px !important;
+  height: 36px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border-radius: 8px !important;
+  color: #475569 !important;
+  transition: all 0.15s ease !important;
+  padding: 0 !important;
+}
+
+.be-editor .ce-inline-tool svg {
+  width: 18px !important;
+  height: 18px !important;
+}
+
+.be-editor .ce-inline-tool:hover {
+  background: var(--be-bg-hover) !important;
+  color: var(--be-primary) !important;
+  transform: scale(1.05) !important;
+}
+
+.be-editor .ce-inline-tool--active {
+  background: var(--be-primary-alpha) !important;
+  color: var(--be-primary) !important;
+  font-weight: 600 !important;
+}
+
+.be-editor .ce-inline-toolbar__dropdown {
+  height: 36px !important;
+  padding: 0 10px !important;
+  border-radius: 8px !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  border-right: 1px solid var(--be-border) !important;
+  margin-right: 4px !important;
+}
+
+/* ============================================
+   ENLARGED POPOVER & SETTINGS MENU
+   ============================================ */
+
+.be-editor .ce-popover {
+  min-width: 300px !important;
+  max-width: 340px !important;
+  background: var(--be-bg) !important;
+  border: 1px solid var(--be-border) !important;
+  border-radius: 14px !important;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.14), 0 2px 8px rgba(0, 0, 0, 0.04) !important;
+  padding: 8px !important;
+}
+
+.be-editor .ce-popover__search {
+  height: 42px !important;
+  padding: 8px 14px !important;
+  font-size: 14px !important;
+  border-radius: 10px !important;
+  background: var(--be-bg-secondary) !important;
+  border: 1px solid var(--be-border) !important;
+  margin-bottom: 8px !important;
+}
+
+.be-editor .ce-popover__search:focus {
+  border-color: var(--be-primary) !important;
+}
+
+.be-editor .ce-popover-item {
+  min-height: 44px !important;
+  padding: 8px 12px !important;
+  border-radius: 10px !important;
+  gap: 12px !important;
+  transition: all 0.15s ease !important;
+  cursor: pointer !important;
+}
+
+.be-editor .ce-popover-item:hover {
+  background: var(--be-bg-hover) !important;
+}
+
+.be-editor .ce-popover-item__icon {
+  width: 34px !important;
+  height: 34px !important;
+  background: var(--be-bg-secondary) !important;
+  border: 1px solid var(--be-border) !important;
+  border-radius: 8px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex-shrink: 0 !important;
+}
+
+.be-editor .ce-popover-item__icon svg {
+  width: 18px !important;
+  height: 18px !important;
+}
+
+.be-editor .ce-popover-item__title {
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  color: var(--be-text) !important;
+}
+
+.be-editor .ce-popover-item__secondary-title {
+  font-size: 12px !important;
+  color: var(--be-text-secondary) !important;
+}
+
+/* ============================================
+   BLOCK CONVERSION & TUNES
+   ============================================ */
+
+.be-editor .ce-conversion-toolbar {
+  background: var(--be-bg) !important;
+  border: 1px solid var(--be-border) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12) !important;
+  padding: 6px !important;
+}
+
+.be-editor .ce-settings {
+  background: var(--be-bg) !important;
+  border: 1px solid var(--be-border) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12) !important;
+  padding: 6px !important;
+}
+
+/* Placeholder */
+.be-editor .ce-paragraph[data-placeholder]:empty::before {
+  color: var(--be-text-placeholder) !important;
+  font-weight: 400 !important;
+}

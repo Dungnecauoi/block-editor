@@ -1,0 +1,11 @@
+.be-iframe-tool { margin: 12px 0; }
+.be-iframe-tool__container { border-radius: 8px; overflow: hidden; border: 1px solid var(--be-border, #e5e7eb); }
+.be-iframe-tool__container iframe { display: block; width: 100%; border: none; }
+.be-iframe-tool__caption { margin-top: 8px; padding: 4px 8px; font-size: 13px; color: var(--be-text-secondary, #6b7280); text-align: center; outline: none; }
+.be-iframe-tool__caption:empty::before { content: attr(data-placeholder); color: var(--be-text-placeholder, #9ca3af); }
+.be-iframe-tool__input {
+  width: 100%; padding: 14px 18px; border: 2px dashed var(--be-border, #d1d5db);
+  border-radius: 12px; font-size: 14px; outline: none; text-align: center;
+  background: var(--be-bg-secondary, #f9fafb); color: var(--be-text, #1f2937);
+}
+.be-iframe-tool__input:focus { border-color: var(--be-primary, #3b82f6); }

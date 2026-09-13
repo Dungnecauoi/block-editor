@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>@duxbo/block-editor — Demo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      color: #1f2937;
+    }
+
+    .demo-header {
+      background: rgba(255,255,255,0.95);
+      backdrop-filter: blur(20px);
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    }
+
+    .demo-header__brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 18px;
+      font-weight: 700;
+      color: #1f2937;
+    }
+
+    .demo-header__brand-icon {
+      width: 32px;
+      height: 32px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    .demo-header__actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .demo-btn {
+      padding: 8px 14px;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      background: white;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 500;
+      color: #374151;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .demo-btn:hover { border-color: #667eea; color: #667eea; }
+    .demo-btn--primary { background: #667eea; color: white; border-color: #667eea; }
+    .demo-btn--primary:hover { background: #5a6fd6; }
+    .demo-btn--danger { border-color: #ef4444; color: #ef4444; }
+    .demo-btn--danger:hover { background: #ef4444; color: white; }
+
+    .demo-container {
+      max-width: 900px;
+      margin: 24px auto;
+      padding: 0 16px;
+    }
+
+    .demo-editor-wrapper {
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+      overflow: hidden;
+      min-height: 500px;
+    }
+
+    #editor-container {
+      padding: 20px 0;
+    }
+
+    .demo-output {
+      margin-top: 24px;
+      background: rgba(255,255,255,0.95);
+      backdrop-filter: blur(20px);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+    }
+
+    .demo-output__header {
+      padding: 16px 20px;
+      border-bottom: 1px solid #e5e7eb;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .demo-output__tab {
+      padding: 6px 12px;
+      border: 1px solid #e5e7eb;
+      border-radius: 6px;
+      background: white;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 500;
+      color: #6b7280;
+    }
+
+    .demo-output__tab--active {
+      background: #667eea;
+      color: white;
+      border-color: #667eea;
+    }
+
+    .demo-output__content {
+      padding: 20px;
+      max-height: 400px;
+      overflow: auto;
+    }
+
+    .demo-output__content pre {
+      white-space: pre-wrap;
+      word-break: break-word;
+      font-family: 'JetBrains Mono', 'Fira Code', monospace;
+      font-size: 13px;
+      line-height: 1.6;
+      color: #1e293b;
+    }
+
+    .demo-footer {
+      text-align: center;
+      padding: 30px 20px 40px;
+      color: rgba(255,255,255,0.7);
+      font-size: 14px;
+    }
+
+    .demo-footer a { color: white; }
+
+    /* Theme indicator */
+    .demo-theme-indicator {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: #6b7280;
+      padding: 4px 10px;
+      background: #f3f4f6;
+      border-radius: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="demo-header">
+    <div class="demo-header__brand">
+      <div class="demo-header__brand-icon">B</div>
+      @duxbo/block-editor
+      <span class="demo-theme-indicator" id="theme-indicator">Theme: default</span>
+    </div>
+    <div class="demo-header__actions">
+      <button class="demo-btn" onclick="switchTheme('default')">☀️ Light</button>
+      <button class="demo-btn" onclick="switchTheme('dark')">🌙 Dark</button>
+      <button class="demo-btn" onclick="switchTheme('minimal')">✨ Minimal</button>
+      <button class="demo-btn" onclick="switchLocale()">🌐 VI / EN</button>
+      <button class="demo-btn demo-btn--primary" onclick="saveEditor()">💾 Save</button>
+      <button class="demo-btn" onclick="exportHTML()">📄 HTML</button>
+      <button class="demo-btn" onclick="exportMarkdown()">📝 Markdown</button>
+      <button class="demo-btn demo-btn--danger" onclick="clearEditor()">🗑 Clear</button>
+    </div>
+  </div>
+
+  <div class="demo-container">
+    <div class="demo-editor-wrapper">
+      <div id="editor-container"></div>
+    </div>
+
+    <div class="demo-output" id="output-panel" style="display:none;">
+      <div class="demo-output__header">
+        <button class="demo-output__tab demo-output__tab--active" id="tab-json" onclick="showOutputTab('json')">JSON</button>
+        <button class="demo-output__tab" id="tab-html" onclick="showOutputTab('html')">HTML</button>
+        <button class="demo-output__tab" id="tab-markdown" onclick="showOutputTab('markdown')">Markdown</button>
+      </div>
+      <div class="demo-output__content">
+        <pre id="output-content"></pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="demo-footer">
+    Built with ❤️ by Duxbo — Powered by <a href="https://editorjs.io" target="_blank">Editor.js</a>
+  </div>
+
+  <script type="module">
+    import { BlockEditor } from '../src/index.ts';
+
+    let currentLocale = 'en';
+    let currentTheme = 'default';
+    let lastOutputType = 'json';
+
+    const editor = new BlockEditor({
+      holder: 'editor-container',
+      theme: 'default',
+      locale: 'en',
+      placeholder: 'Type "/" for commands, or start writing...',
+      data: {
+        blocks: [
+          { type: 'header', data: { text: 'Welcome to @duxbo/block-editor 🎉', level: 1 } },
+          { type: 'paragraph', data: { text: '🚀 <b>Trải nghiệm chỉnh sửa chuẩn doanh nghiệp</b> với hệ thống Action đa tầng, kích thước to rõ, dễ bấm và đầy đủ tiện ích.' } },
+          { type: 'alert', data: { message: '💡 <b>Các tính năng Action mới:</b><br/>• <b>Top Quick Action Bar:</b> Thanh công cụ tiện ích ở trên đầu (Undo/Redo, đổi Heading, In đậm/nghiêng/gạch chân, Highlight, Thêm nhanh Ảnh/Video/Bảng/Tabs, Nhân bản & Xóa khối, Đếm từ).<br/>• <b>Floating Action Bar:</b> Rê chuột qua bất kỳ khối nào để thấy thanh action nổi góc phải: [+] Thêm bên dưới, [📄] Nhân bản, [⬆/⬇] Di chuyển, [📋] Sao chép, [🗑] Xóa.<br/>• <b>Nút [+] và [⠿] bên lề to hơn 46%</b>: Kích thước 38px chuẩn cảm ứng, bo góc 10px, hiệu ứng hover rõ ràng.<br/>• <b>Menu tùy biến [⠿] (Block Tunes):</b> Tích hợp sẵn Nhân bản (Duplicate), Chèn trên/dưới, Sao chép, Xóa trực tiếp.', type: 'primary' } },
+          { type: 'header', data: { text: 'Available Block Types', level: 3 } },
+          { type: 'list', data: { style: 'unordered', items: [
+            { content: '📝 Text blocks: Paragraph, Heading (H1-H6), Quote, Warning, Alert, Toggle', items: [] },
+            { content: '🖼 Media blocks: Image, Video, Audio, Gallery, File Attachment', items: [] },
+            { content: '📊 Layout blocks: Columns, Table, Tabs', items: [] },
+            { content: '🔗 Embed blocks: YouTube, CodePen, Social media, iFrame, Map', items: [] },
+            { content: '💻 Code blocks: Code with syntax highlighting, Raw HTML', items: [] },
+            { content: '🔬 Advanced: Math/LaTeX, Mermaid diagrams, Drawing canvas', items: [] },
+          ] } },
+          { type: 'delimiter', data: {} },
+          { type: 'paragraph', data: { text: '👉 Thử rê chuột vào khối này hoặc dùng thanh công cụ ở trên để thao tác! 👇' } },
+        ],
+      },
+      onChange: (data) => {
+        console.log('Editor changed:', data.blocks.length, 'blocks');
+      },
+      onReady: () => {
+        console.log('✅ @duxbo/block-editor is ready!');
+      },
+    });
+
+    // Expose to window for button handlers
+    window.editorInstance = editor;
+
+    window.saveEditor = async () => {
+      const data = await editor.save();
+      document.getElementById('output-panel').style.display = 'block';
+      document.getElementById('output-content').textContent = JSON.stringify(data, null, 2);
+      showOutputTab('json');
+      lastOutputType = 'json';
+    };
+
+    window.exportHTML = async () => {
+      const html = await editor.toHTML();
+      document.getElementById('output-panel').style.display = 'block';
+      document.getElementById('output-content').textContent = html;
+      showOutputTab('html');
+      lastOutputType = 'html';
+    };
+
+    window.exportMarkdown = async () => {
+      const md = await editor.toMarkdown();
+      document.getElementById('output-panel').style.display = 'block';
+      document.getElementById('output-content').textContent = md;
+      showOutputTab('markdown');
+      lastOutputType = 'markdown';
+    };
+
+    window.clearEditor = async () => {
+      await editor.clear();
+    };
+
+    window.switchTheme = (theme) => {
+      currentTheme = theme;
+      editor.setTheme(theme);
+      document.getElementById('theme-indicator').textContent = `Theme: ${theme}`;
+      // Update body background for dark theme
+      if (theme === 'dark') {
+        document.querySelector('.demo-editor-wrapper').style.background = '#1a1a2e';
+      } else {
+        document.querySelector('.demo-editor-wrapper').style.background = 'white';
+      }
+    };
+
+    window.switchLocale = () => {
+      alert('To switch locale, the editor needs to be re-initialized.\nSet locale: "vi" or "en" in the constructor config.');
+    };
+
+    window.showOutputTab = (type) => {
+      document.querySelectorAll('.demo-output__tab').forEach(t => t.classList.remove('demo-output__tab--active'));
+      document.getElementById(`tab-${type}`).classList.add('demo-output__tab--active');
+      
+      if (type === 'json') window.saveEditor();
+      else if (type === 'html') window.exportHTML();
+      else if (type === 'markdown') window.exportMarkdown();
+    };
+  </script>
+</body>
+</html>

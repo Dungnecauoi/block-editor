@@ -1,0 +1,9 @@
+.be-map-tool { margin: 12px 0; }
+.be-map-tool__container { border-radius: 12px; overflow: hidden; border: 1px solid var(--be-border, #e5e7eb); }
+.be-map-tool__container iframe { display: block; border: none; }
+.be-map-tool__controls { display: flex; gap: 8px; margin-top: 8px; }
+.be-map-tool__coord {
+  flex: 1; padding: 8px 12px; border: 1px solid var(--be-border, #d1d5db); border-radius: 6px;
+  font-size: 13px; outline: none; background: var(--be-bg, #fff); color: var(--be-text, #1f2937);
+}
+.be-map-tool__coord:focus { border-color: var(--be-primary, #3b82f6); }

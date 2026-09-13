@@ -1,0 +1,118 @@
+/* ============================================
+   @duxbo/block-editor — Dark Theme
+   ============================================ */
+
+.be-editor--dark {
+  --be-bg: #1a1a2e;
+  --be-bg-secondary: #16213e;
+  --be-bg-hover: #0f3460;
+  --be-text: #e4e6eb;
+  --be-text-secondary: #94a3b8;
+  --be-text-placeholder: #64748b;
+  --be-primary: #818cf8;
+  --be-primary-alpha: rgba(129, 140, 248, 0.15);
+  --be-border: #2e3856;
+  --be-radius: 10px;
+}
+
+.be-editor--dark {
+  background-color: var(--be-bg);
+  color: var(--be-text);
+}
+
+.be-editor--dark .codex-editor {
+  color: var(--be-text);
+}
+
+.be-editor--dark .ce-block__content {
+  color: var(--be-text);
+}
+
+/* Toolbar actions container (+ and 6-dots button) */
+.be-editor--dark .ce-toolbar__actions {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+}
+
+.be-editor--dark .ce-toolbar__plus,
+.be-editor--dark .ce-toolbar__settings-btn {
+  width: 38px !important;
+  height: 38px !important;
+  color: var(--be-text-secondary) !important;
+  background: var(--be-bg-secondary) !important;
+  border: 1px solid var(--be-border) !important;
+  border-radius: 10px !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3) !important;
+}
+
+.be-editor--dark .ce-toolbar__plus:hover,
+.be-editor--dark .ce-toolbar__settings-btn:hover {
+  background: var(--be-primary) !important;
+  border-color: var(--be-primary) !important;
+  color: #ffffff !important;
+  transform: scale(1.1) !important;
+  box-shadow: 0 4px 16px rgba(129, 140, 248, 0.4) !important;
+}
+
+.be-editor--dark .ce-toolbox,
+.be-editor--dark .ce-inline-toolbar,
+.be-editor--dark .ce-conversion-toolbar,
+.be-editor--dark .ce-settings,
+.be-editor--dark .ce-popover {
+  background: var(--be-bg-secondary) !important;
+  border-color: var(--be-border) !important;
+  color: var(--be-text) !important;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5) !important;
+}
+
+.be-editor--dark .ce-popover__search {
+  background: var(--be-bg) !important;
+  border-color: var(--be-border) !important;
+  color: var(--be-text) !important;
+}
+
+.be-editor--dark .ce-popover-item:hover {
+  background: var(--be-bg-hover) !important;
+}
+
+.be-editor--dark .ce-popover-item__icon {
+  background: var(--be-bg) !important;
+  border-color: var(--be-border) !important;
+  color: var(--be-text-secondary) !important;
+}
+
+.be-editor--dark .ce-popover-item__title {
+  color: var(--be-text) !important;
+}
+
+.be-editor--dark .ce-inline-tool {
+  color: var(--be-text-secondary) !important;
+}
+
+.be-editor--dark .ce-inline-tool:hover {
+  background: var(--be-bg-hover) !important;
+  color: var(--be-text) !important;
+}
+
+.be-editor--dark .ce-block--selected .ce-block__content {
+  background: var(--be-primary-alpha) !important;
+}
+
+.be-editor--dark .ce-block:hover .ce-block__content {
+  outline: 1px dashed rgba(129, 140, 248, 0.25) !important;
+}
+
+.be-editor--dark .ce-paragraph[data-placeholder]:empty::before {
+  color: var(--be-text-placeholder) !important;
+}
+
+.be-editor--dark .cdx-input {
+  background: var(--be-bg) !important;
+  border-color: var(--be-border) !important;
+  color: var(--be-text) !important;
+}
+
+.be-editor--dark a {
+  color: var(--be-primary) !important;
+}

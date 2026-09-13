@@ -1,0 +1,26 @@
+.be-drawing-tool { margin: 12px 0; }
+.be-drawing-tool__toolbar {
+  display: flex; align-items: center; gap: 6px; padding: 8px 12px;
+  background: var(--be-bg-secondary, #f3f4f6); border-radius: 8px 8px 0 0;
+  border: 1px solid var(--be-border, #e5e7eb); border-bottom: none; flex-wrap: wrap;
+}
+.be-drawing-tool__color {
+  width: 24px; height: 24px; border-radius: 50%; border: 2px solid transparent;
+  cursor: pointer; transition: all 0.2s;
+}
+.be-drawing-tool__color--active { border-color: var(--be-primary, #3b82f6); transform: scale(1.2); }
+.be-drawing-tool__size {
+  padding: 2px 8px; border: 1px solid var(--be-border, #d1d5db); border-radius: 4px;
+  background: transparent; cursor: pointer; font-size: 11px; font-weight: 600;
+  color: var(--be-text-secondary, #6b7280);
+}
+.be-drawing-tool__size--active { background: var(--be-primary, #3b82f6); color: #fff; border-color: var(--be-primary, #3b82f6); }
+.be-drawing-tool__clear {
+  margin-left: auto; padding: 4px 10px; border: 1px solid #ef4444; border-radius: 4px;
+  background: transparent; cursor: pointer; font-size: 12px; color: #ef4444;
+}
+.be-drawing-tool__clear:hover { background: #ef4444; color: #fff; }
+.be-drawing-tool__canvas {
+  width: 100%; border: 1px solid var(--be-border, #e5e7eb); border-radius: 0 0 8px 8px;
+  cursor: crosshair; background: #fff; display: block; touch-action: none;
+}

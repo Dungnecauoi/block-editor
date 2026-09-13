@@ -1,0 +1,201 @@
+/* ============================================
+   @duxbo/block-editor — Top Quick Action Bar
+   ============================================ */
+
+.be-top-toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 16px;
+  background: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--be-border, #e5e7eb);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.be-top-toolbar__scroll {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  padding: 2px 0;
+}
+
+.be-top-toolbar__scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.be-toolbar-group {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  flex-shrink: 0;
+}
+
+.be-toolbar-divider {
+  width: 1px;
+  height: 24px;
+  background: var(--be-border, #e5e7eb);
+  margin: 0 4px;
+  flex-shrink: 0;
+}
+
+.be-tbar-btn {
+  height: 36px;
+  min-width: 36px;
+  padding: 0 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  color: var(--be-text, #374151);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.be-tbar-btn:hover {
+  background: var(--be-bg-hover, #f3f4f6);
+  color: var(--be-primary, #3b82f6);
+  border-color: var(--be-border, #e5e7eb);
+}
+
+.be-tbar-btn:active {
+  transform: scale(0.97);
+}
+
+.be-tbar-btn--insert {
+  background: var(--be-bg-secondary, #f8fafc);
+  border-color: var(--be-border, #e2e8f0);
+}
+
+.be-tbar-btn--insert:hover {
+  background: #eff6ff;
+  border-color: #bfdbfe;
+  color: #2563eb;
+}
+
+.be-tbar-btn--danger:hover {
+  background: #fef2f2;
+  color: #ef4444;
+  border-color: #fecaca;
+}
+
+.be-tbar-btn--icon-only {
+  width: 36px;
+  padding: 0;
+}
+
+.be-tbar-select {
+  height: 36px;
+  padding: 0 10px;
+  border: 1px solid var(--be-border, #d1d5db);
+  border-radius: 8px;
+  background: var(--be-bg, #ffffff);
+  color: var(--be-text, #374151);
+  font-size: 13px;
+  font-weight: 500;
+  outline: none;
+  cursor: pointer;
+  transition: border-color 0.15s ease;
+}
+
+.be-tbar-select:focus {
+  border-color: var(--be-primary, #3b82f6);
+}
+
+/* Right side items */
+.be-top-toolbar__right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+  margin-left: 12px;
+}
+
+.be-tbar-stats {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--be-text-secondary, #6b7280);
+  background: var(--be-bg-secondary, #f9fafb);
+  border: 1px solid var(--be-border, #e5e7eb);
+  padding: 4px 10px;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+
+.be-tbar-stat strong {
+  color: var(--be-text, #1f2937);
+}
+
+.be-tbar-stat-dot {
+  color: #d1d5db;
+}
+
+/* Fullscreen mode */
+.be-editor.be-editor--fullscreen {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 999999 !important;
+  background: var(--be-bg, #ffffff) !important;
+  border-radius: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  height: 100vh !important;
+  max-width: 100% !important;
+  overflow-y: auto !important;
+}
+
+.be-editor--fullscreen .codex-editor {
+  max-width: 900px;
+  margin: 30px auto 100px;
+}
+
+/* Dark mode */
+.be-editor--dark .be-top-toolbar {
+  background: rgba(26, 26, 46, 0.98);
+  border-color: #2e3856;
+}
+
+.be-editor--dark .be-tbar-btn {
+  color: #cbd5e1;
+}
+
+.be-editor--dark .be-tbar-btn:hover {
+  background: #252b48;
+  color: #60a5fa;
+  border-color: #3b4261;
+}
+
+.be-editor--dark .be-tbar-btn--insert {
+  background: #1e2238;
+  border-color: #33395c;
+}
+
+.be-editor--dark .be-tbar-select {
+  background: #1e2238;
+  border-color: #33395c;
+  color: #f1f5f9;
+}
+
+.be-editor--dark .be-tbar-stats {
+  background: #1e2238;
+  border-color: #33395c;
+  color: #94a3b8;
+}
+
+.be-editor--dark .be-tbar-stats strong {
+  color: #f1f5f9;
+}

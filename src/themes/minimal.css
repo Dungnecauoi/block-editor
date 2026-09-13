@@ -1,0 +1,46 @@
+/* ============================================
+   @duxbo/block-editor — Minimal Theme
+   ============================================ */
+
+.be-editor--minimal {
+  --be-bg: #ffffff;
+  --be-bg-secondary: #fafafa;
+  --be-bg-hover: #f5f5f5;
+  --be-text: #171717;
+  --be-text-secondary: #a3a3a3;
+  --be-text-placeholder: #d4d4d4;
+  --be-primary: #171717;
+  --be-primary-alpha: rgba(23, 23, 23, 0.05);
+  --be-border: #f0f0f0;
+  --be-radius: 4px;
+  --be-font-family: 'Georgia', 'Times New Roman', serif;
+}
+
+.be-editor--minimal .ce-toolbar__plus,
+.be-editor--minimal .ce-toolbar__settings-btn {
+  opacity: 0.3;
+  transition: opacity 0.2s;
+}
+
+.be-editor--minimal .ce-toolbar__plus:hover,
+.be-editor--minimal .ce-toolbar__settings-btn:hover {
+  opacity: 1;
+}
+
+.be-editor--minimal .ce-toolbox,
+.be-editor--minimal .ce-inline-toolbar,
+.be-editor--minimal .ce-settings,
+.be-editor--minimal .ce-popover {
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.be-editor--minimal .ce-popover-item__icon {
+  border: none;
+  background: transparent;
+}
+
+.be-editor--minimal .ce-block--selected .ce-block__content {
+  background: var(--be-primary-alpha);
+  border-radius: 2px;
+}

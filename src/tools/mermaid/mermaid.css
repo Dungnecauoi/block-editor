@@ -1,0 +1,15 @@
+.be-mermaid-tool { margin: 12px 0; }
+.be-mermaid-tool__preview {
+  padding: 16px; background: var(--be-bg-secondary, #f9fafb); border-radius: 8px;
+  text-align: center; overflow-x: auto; min-height: 60px;
+}
+.be-mermaid-tool__preview svg { max-width: 100%; height: auto; }
+.be-mermaid-tool__error { color: #ef4444; font-size: 13px; font-family: monospace; padding: 12px; }
+.be-mermaid-tool__editor { margin-top: 10px; }
+.be-mermaid-tool__input {
+  width: 100%; padding: 12px 14px; border: 1px solid var(--be-border, #d1d5db);
+  border-radius: 8px; font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  font-size: 13px; resize: vertical; outline: none; line-height: 1.5;
+  background: #1e293b; color: #e2e8f0;
+}
+.be-mermaid-tool__input:focus { border-color: var(--be-primary, #3b82f6); box-shadow: 0 0 0 3px rgba(59,130,246,0.1); }
