@@ -21,7 +21,7 @@
   opacity: 0;
   visibility: hidden;
   transform: translateY(-4px) scale(0.96);
-  transition: opacity 0.18s ease, transform 0.18s ease, visibility 0.18s;
+  transition: opacity 0.18s ease, transform 0.18s ease, visibility 0.18s, top 0.15s ease;
   pointer-events: none;
 }
 

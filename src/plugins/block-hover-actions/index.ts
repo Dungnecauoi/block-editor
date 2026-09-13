@@ -108,8 +108,18 @@ export class BlockHoverActions {
   private positionToolbar(blockEl: HTMLElement): void {
     const holderRect = this.holder.getBoundingClientRect();
     const blockRect = blockEl.getBoundingClientRect();
+    const toolbarHeight = this.toolbar.offsetHeight || 40;
+    const gap = 6;
 
-    const top = blockRect.top - holderRect.top + 4;
+    // Float just above the block, out of the way of its own first line —
+    // this editor's blocks run full-width, so anchoring at the block's own
+    // top edge (the old behavior) sat the bar directly on top of wrapped
+    // text near the right edge, blocking clicks and hiding content. Only
+    // fall back to overlapping the corner when there's no room above (the
+    // very first block).
+    const aboveTop = blockRect.top - holderRect.top - toolbarHeight - gap;
+    const inlineTop = blockRect.top - holderRect.top + 4;
+    const top = aboveTop >= 0 ? aboveTop : inlineTop;
     const right = 24;
 
     this.toolbar.style.top = `${top}px`;
