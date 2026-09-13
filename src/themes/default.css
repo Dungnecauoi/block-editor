@@ -232,6 +232,27 @@
 }
 
 /* ============================================
+   TABLE — column/row menu clipped by the table's own sticky header
+
+   @editorjs/table's sticky header row (.tc-row) has z-index:2, while the
+   menu's own positioned parent .tc-toolbox only has z-index:1 — so whenever
+   the menu overlaps the header, the header paints over it. Reproduced
+   directly: "Add column to right" was fully present and correctly laid out
+   in the DOM, just visually painted over by the "Heading" header cell
+   behind it. The fix has to raise .tc-toolbox specifically, not just its
+   .tc-popover child — a descendant's z-index only wins comparisons among
+   its own parent's children; against .tc-row (a separate branch, sibling
+   of .tc-toolbox's ancestor .tc-table) it's .tc-toolbox (z-index:1) vs
+   .tc-row (z-index:2) that decides the paint order, and no z-index on the
+   popover itself can override that ceiling.
+   ============================================ */
+
+.be-editor .tc-toolbox,
+.be-editor .tc-popover {
+  z-index: 60 !important;
+}
+
+/* ============================================
    ENLARGED POPOVER & SETTINGS MENU
 
    A closed popover (e.g. the toolbox trigger, always present inside
